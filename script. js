@@ -1,4 +1,42 @@
+// script.js
+const socket = io();
 
-document.addEventListener("DOMContentLoaded", () => {
-    alert("✅ script.js está funcionando correctamente");
+// UI
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
+const nickInput = document.getElementById('nick');
+
+// enviar mensaje
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  const payload = {
+    user: (nickInput.value || 'Anon').slice(0, 20),
+    text,
+    at: new Date().toISOString()
+  };
+  socket.emit('chat message', payload);
+  input.value = '';
 });
+
+// recibir mensaje (de cualquier usuario)
+socket.on('chat message', (msg) => {
+  pushMessage(msg);
+});
+
+function pushMessage(msg) {
+  const div = document.createElement('div');
+  div.className = 'msg';
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  const t = new Date(msg.at || Date.now());
+  meta.textContent = `${msg.user || 'Anon'} • ${t.toLocaleTimeString()}`;
+  const txt = document.createElement('div');
+  txt.textContent = msg.text;
+  div.appendChild(meta);
+  div.appendChild(txt);
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
