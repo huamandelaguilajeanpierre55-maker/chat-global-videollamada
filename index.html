@@ -1,40 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chat Global — en vivo</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#0f172a,#111827); color:#e6eef6; margin:0; display:flex; justify-content:center; align-items:center; height:100vh; }
-    .card { width:95%; max-width:650px; background:#0b1220; padding:18px; border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,.6); }
-    h1 { margin:0 0 12px; color:#00ffcc; text-align:center; }
-    #messages { height:360px; overflow:auto; padding:8px; border-radius:8px; background:rgba(255,255,255,0.02); margin-bottom:12px; }
-    .msg { padding:8px 10px; margin:6px 0; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); }
-    .meta { font-size:12px; color:#9ca3af; margin-bottom:6px; }
-    .input-area { display:flex; gap:8px; }
-    input[type="text"] { flex:1; padding:10px; border-radius:8px; border:1px solid #1f2937; background:#071525; color:#e6eef6; }
-    button { padding:10px 14px; border-radius:8px; border:none; background:#00ffcc; color:#000; font-weight:700; cursor:pointer; }
-    @media (max-width:520px){ #messages { height:300px } }
-  </style>
+    <meta charset="UTF-8">
+    <title>Mi Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <div class="card">
-    <h1>💬 Chat Global (en vivo)</h1>
-
-    <div id="messages"></div>
-
-    <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <input id="nick" type="text" placeholder="Tu nombre (opcional)" maxlength="20" style="flex:0 0 180px; padding:10px; border-radius:8px; border:1px solid #1f2937; background:#071525; color:#e6eef6;">
-      <div style="flex:1"></div>
-    </div>
-
-    <form id="form" class="input-area">
-      <input id="input" autocomplete="off" placeholder="Escribe tu mensaje..." type="text" />
-      <button type="submit">Enviar</button>
+    <h1>Chat en vivo</h1>
+    <ul id="mensajes"></ul>
+    <form id="form">
+        <input id="input" autocomplete="off" /><button>Enviar</button>
     </form>
-  </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="script.js" defer></script>
+    <script>
+        var socket = io();
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        var mensajes = document.getElementById('mensajes');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            mensajes.appendChild(item);
+            mensajes.scrollTop = mensajes.scrollHeight;
+        });
+    </script>
 </body>
 </html>
