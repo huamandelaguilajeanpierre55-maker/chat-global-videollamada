@@ -1,37 +1,133 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Mi Chat</title>
-    <script src="/socket.io/socket.io.js"></script>
+  <meta charset="UTF-8">
+  <title>Mi Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ece5dd;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 400px;
+      height: 600px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .header {
+      background: #075e54;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #mensajes {
+      list-style: none;
+      padding: 10px;
+      margin: 0;
+      flex: 1;
+      overflow-y: auto;
+      background: #e5ddd5;
+    }
+
+    #mensajes li {
+      margin: 5px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 70%;
+      word-wrap: break-word;
+      clear: both;
+    }
+
+    /* Mensajes enviados */
+    #mensajes li.enviado {
+      background: #dcf8c6;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    /* Mensajes recibidos */
+    #mensajes li.recibido {
+      background: #fff;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    form {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    form input {
+      border: none;
+      padding: 10px;
+      flex: 1;
+      font-size: 16px;
+    }
+
+    form button {
+      background: #075e54;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #128c7e;
+    }
+  </style>
 </head>
 <body>
-    <h1>Chat en vivo</h1>
+  <div class="chat-container">
+    <div class="header">💬 Mi Chat</div>
     <ul id="mensajes"></ul>
     <form id="form">
-        <input id="input" autocomplete="off" /><button>Enviar</button>
+      <input id="input" autocomplete="off" placeholder="Escribe un mensaje..." />
+      <button>Enviar</button>
     </form>
+  </div>
 
-    <script>
-        var socket = io();
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
-        var mensajes = document.getElementById('mensajes');
+  <script>
+    var socket = io();
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+    var mensajes = document.getElementById('mensajes');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-                socket.emit('chat message', input.value);
-                input.value = '';
-            }
-        });
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        agregarMensaje(input.value, 'enviado');
+        input.value = '';
+      }
+    });
 
-        socket.on('chat message', function(msg) {
-            var item = document.createElement('li');
-            item.textContent = msg;
-            mensajes.appendChild(item);
-            mensajes.scrollTop = mensajes.scrollHeight;
-        });
-    </script>
+    socket.on('chat message', function(msg) {
+      agregarMensaje(msg, 'recibido');
+    });
+
+    function agregarMensaje(texto, tipo) {
+      var item = document.createElement('li');
+      item.textContent = texto;
+      item.classList.add(tipo);
+      mensajes.appendChild(item);
+      mensajes.scrollTop = mensajes.scrollHeight;
+    }
+  </script>
 </body>
 </html>
