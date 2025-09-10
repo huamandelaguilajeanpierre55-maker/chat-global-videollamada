@@ -1,97 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Global</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chat Global — en vivo</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-    .chat-container {
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-    }
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 10px;
-      color: #00ffcc;
-      text-shadow: 0px 0px 10px #00ffcc;
-    }
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      text-align: left;
-      padding-right: 5px;
-    }
-    .msg {
-      background: rgba(0,0,0,0.5);
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin: 5px 0;
-      font-size: 0.9em;
-    }
-    input, button {
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-    }
-    input {
-      flex: 1;
-      margin-right: 5px;
-    }
-    button {
-      background: #00ffcc;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #00cc99;
-    }
-    .input-area {
-      display: flex;
-    }
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#0f172a,#111827); color:#e6eef6; margin:0; display:flex; justify-content:center; align-items:center; height:100vh; }
+    .card { width:95%; max-width:650px; background:#0b1220; padding:18px; border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,.6); }
+    h1 { margin:0 0 12px; color:#00ffcc; text-align:center; }
+    #messages { height:360px; overflow:auto; padding:8px; border-radius:8px; background:rgba(255,255,255,0.02); margin-bottom:12px; }
+    .msg { padding:8px 10px; margin:6px 0; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); }
+    .meta { font-size:12px; color:#9ca3af; margin-bottom:6px; }
+    .input-area { display:flex; gap:8px; }
+    input[type="text"] { flex:1; padding:10px; border-radius:8px; border:1px solid #1f2937; background:#071525; color:#e6eef6; }
+    button { padding:10px 14px; border-radius:8px; border:none; background:#00ffcc; color:#000; font-weight:700; cursor:pointer; }
+    @media (max-width:520px){ #messages { height:300px } }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <h1>💬 Chat Global (demo)</h1>
+  <div class="card">
+    <h1>💬 Chat Global (en vivo)</h1>
+
     <div id="messages"></div>
-    <div class="input-area">
-      <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
-      <button onclick="sendMessage()">Enviar</button>
+
+    <div style="display:flex; gap:8px; margin-bottom:8px;">
+      <input id="nick" type="text" placeholder="Tu nombre (opcional)" maxlength="20" style="flex:0 0 180px; padding:10px; border-radius:8px; border:1px solid #1f2937; background:#071525; color:#e6eef6;">
+      <div style="flex:1"></div>
     </div>
+
+    <form id="form" class="input-area">
+      <input id="input" autocomplete="off" placeholder="Escribe tu mensaje..." type="text" />
+      <button type="submit">Enviar</button>
+    </form>
   </div>
 
-  <script>
-    function sendMessage() {
-      const input = document.getElementById("msgInput");
-      const msg = input.value.trim();
-      if(msg !== "") {
-        const messagesDiv = document.getElementById("messages");
-        const newMsg = document.createElement("div");
-        newMsg.className = "msg";
-        newMsg.textContent = "Tú: " + msg;
-        messagesDiv.appendChild(newMsg);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        input.value = "";
-      }
-    }
-  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
