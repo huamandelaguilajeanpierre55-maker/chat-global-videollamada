@@ -1,20 +1,29 @@
-const express = require("express");
+// servidor.js
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
+
 const app = express();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const server = http.createServer(app);
+const io = new Server(server);
 
-io.on("connection", (socket) => {
-  console.log("Un usuario se conectó");
+// Servir archivos estáticos (index.html, script.js, css si hay)
+app.use(express.static(path.join(__dirname))); // sirve la carpeta del repo
 
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
+io.on('connection', (socket) => {
+  console.log('→ Nuevo cliente conectado:', socket.id);
+
+  // recibir mensaje del cliente y reenviarlo a todos
+  socket.on('chat message', (payload) => {
+    // payload puede ser { user: '...', text: '...' }
+    io.emit('chat message', payload);
   });
 
-  socket.on("disconnect", () => {
-    console.log("Un usuario se desconectó");
+  socket.on('disconnect', () => {
+    console.log('← Cliente desconectado:', socket.id);
   });
 });
 
-http.listen(3000, () => {
-  console.log("Servidor escuchando en http://localhost:3000");
-});
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
