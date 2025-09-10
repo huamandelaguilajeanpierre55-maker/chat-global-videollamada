@@ -1,15 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Global con Videollamadas</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Global</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff0000, #000000, #0000ff); /* Rojo → Negro → Azul */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      animation: fadeIn 2s ease-in-out;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+      color: #39ff14; /* Verde neón */
+      text-shadow: 0px 0px 15px #39ff14; /* Brillo */
+    }
+    p {
+      font-size: 1.2em;
+      color: #eee;
+    }
+    button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      background: #ffff00; /* Amarillo */
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff9900; /* Naranja */
+      transform: scale(1.05);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <h1>Bienvenido al Chat Global</h1>
-    <p>Este es el cliente del chat.</p>
-
-    <!-- Aquí se conecta el script -->
-    <script src="script.js"></script>
+  <div class="container">
+    <h1>🌍 Bienvenido al Chat Global 🌍</h1>
+    <p>Tu aplicación está lista y funcionando en GitHub Pages 🚀</p>
+    <button onclick="alert('Pronto podrás chatear aquí 🔥')">Entrar al Chat</button>
+  </div>
 </body>
-</html>
+</html
