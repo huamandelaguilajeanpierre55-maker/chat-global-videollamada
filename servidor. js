@@ -3,20 +3,20 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-app.use(express.static("public")); // sirve tu index.html
+app.use(express.static("public")); // Carpeta con tu index.html
 
 io.on("connection", (socket) => {
-    console.log("Un usuario se conectó");
+    console.log("🔵 Un usuario se conectó");
 
     socket.on("chat message", (msg) => {
-        io.emit("chat message", msg);
+        io.emit("chat message", msg); // reenviar a todos
     });
 
     socket.on("disconnect", () => {
-        console.log("Un usuario se desconectó");
+        console.log("🔴 Un usuario se desconectó");
     });
 });
 
 http.listen(3000, () => {
-    console.log("Servidor corriendo en http://localhost:3000");
+    console.log("✅ Servidor corriendo en http://localhost:3000");
 });
